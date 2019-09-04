@@ -1,2 +1,4 @@
 ^\.pbattributes$
 ^manifest\.json$
+^renv$
+^renv\.lock$
