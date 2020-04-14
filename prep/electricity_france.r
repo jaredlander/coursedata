@@ -19,3 +19,4 @@ elec <- elec_raw %>%
     tsibble::as_tsibble(index=Date)
 
 readr::write_csv(elec, here::here('data', 'electricity_france.csv'))
+piggyback::pb_upload(file='data/electricity_france.csv', repo='jaredlander/coursedata')
