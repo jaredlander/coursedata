@@ -63,3 +63,10 @@ all_ratings <- bind_rows(raw_arabica, raw_robusta) %>%
 write_csv(all_ratings, path='data/coffee.csv')
 
 piggyback::pb_upload(file='data/coffee.csv', repo='jaredlander/coursedata')
+
+set.seed(171)
+all_ratings %>% 
+    slice_sample(n=50) %>% 
+    write_csv(path='data/coffee_new.csv')
+
+piggyback::pb_upload(file='data/coffee_new.csv', repo='jaredlander/coursedata')
