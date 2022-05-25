@@ -168,6 +168,12 @@ time_use <- atus |>
         , AgeOfYoungestChild=if_else(
             AgeOfYoungestChild < 0, NA_real_, AgeOfYoungestChild
         )
+        , WorkHoursPerWeek=if_else(
+            as.numeric(WorkHoursPerWeek) < 0, NA_real_, as.numeric(WorkHoursPerWeek)
+        )
+        , WorkHoursPerWeek=if_else(
+            LaborForceStatus == 'Employed', WorkHoursPerWeek, 0
+        )
         , Sex=if_else(Sex == 1, 'Male', 'Female')
         , LaborForceStatus = case_when(
             LaborForceStatus == 1 ~ 'Employed', # at work
@@ -214,6 +220,11 @@ time_use <- atus |>
         , WeeklyEarnings=case_when(
             WeeklyEarnings < 0 ~ NA_real_,
             TRUE ~ WeeklyEarnings
+        )
+        , WeeklyEarnings=if_else(
+            LaborForceStatus == 'Employed',
+            WeeklyEarnings,
+            0
         )
         # the last two digits are decimals
         , WeeklyEarnings=WeeklyEarnings/100
@@ -266,6 +277,7 @@ time_use <- atus |>
         # RelgiousActivities
         , RelgiousActivities=religious_attend + religious_participate + 
             religious_waiting + religious_education
+        , Social=social_social + social_events_1 + social_events_2
         # Volunteering
         , Volunteering=t150101 + t150102 + t150103 + t150104 + t150105 + 
             t150106 + t150199 + t150201 + t150202 + t150203 + t150204 + 
@@ -322,6 +334,8 @@ time_use <- atus |>
         -class_for_degree, -class_for_personal, -class_waiting, -class_misc,
         # Homework
         -homework_degree, -homework_personal, -homework_misc,
+        # Social
+        -social_social, -social_events_1, -social_events_2,
         # Shopping
         -shop_grocery, -shop_gas, -shop_food, -shop_etc, -shop_research,
         # RelgiousActivities
@@ -362,12 +376,14 @@ readr::write_csv(
 pb_upload(
     file='data/time_use_survey_2020.csv', 
     repo='jaredlander/coursedata',
-    name='data/time_use_survey_2020.csv'
+    name='data/time_use_survey_2020.csv',
+    overwrite=TRUE
 )
 pb_upload(
     file='data/time_use_survey_2020_new.csv', 
     repo='jaredlander/coursedata',
-    name='data/time_use_survey_2020_new.csv'
+    name='data/time_use_survey_2020_new.csv',
+    overwrite=TRUE
 )
 
 # Upload to jaredlander.com ####
